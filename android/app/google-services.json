@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1069305032577",
+    "firebase_url": "https://talkto-chat.firebaseio.com",
+    "project_id": "talkto-chat",
+    "storage_bucket": "talkto-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069305032577:android:fb8332f417b52b597ec280",
+        "android_client_info": {
+          "package_name": "com.talkto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069305032577-87gvbhejf5hpb0crek2vegi2k2r02jbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs_JTFhOAXY_YBA3mqb9MS8oeWPjyWvsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069305032577-87gvbhejf5hpb0crek2vegi2k2r02jbe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
