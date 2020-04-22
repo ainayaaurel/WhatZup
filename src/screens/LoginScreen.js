@@ -6,10 +6,15 @@ import {
   Text,
   StyleSheet,
   Dimensions,
+  AsyncStorage,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconEmail from 'react-native-vector-icons/Fontisto';
 import IconPass from 'react-native-vector-icons/Feather';
+// import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
 // style={styles.inputIcon}
 
@@ -67,6 +72,33 @@ const styles = StyleSheet.create({
 });
 
 export default class LoginScreen extends Component {
+  state = {
+    email: '',
+    password: '',
+  };
+
+  onSumbitData = (e) => {
+    auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        auth().onAuthStateChanged((Users) => {
+          database()
+            .ref(`users/${Users.uid}`)
+            .once('value')
+            .then((data) => {
+              console.log('mudahkanlah ya Allah', data.val());
+            });
+          this.props.navigation.navigate('MainHome');
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert('Wrong Email Or Password');
+      });
+  };
+  handleChange = (key) => (val) => {
+    this.setState({[key]: val});
+  };
   onHandleToSignUp = () => {
     this.props.navigation.navigate('Register');
   };
@@ -76,6 +108,11 @@ export default class LoginScreen extends Component {
   onHandleToHome = () => {
     this.props.navigation.navigate('MainHome');
   };
+
+  // componentDidMount() {
+  //   database().ref('users/').set({email: 'ainaya@gmail.com'});
+  // }
+
   render() {
     return (
       <View style={styles.parents}>
@@ -88,6 +125,7 @@ export default class LoginScreen extends Component {
             placeholder="Email Address"
             placeholderTextColor="rgba(255,255,255, 0.7)"
             underlineColorAndroid="transparent"
+            onChangeText={(text) => this.setState({email: text})}
           />
         </View>
         <View>
@@ -96,12 +134,13 @@ export default class LoginScreen extends Component {
             placeholder="Password"
             placeholderTextColor="rgba(255,255,255, 0.7)"
             underlineColorAndroid="transparent"
+            onChangeText={(text) => this.setState({password: text})}
           />
         </View>
         <View>
           <TouchableOpacity
             style={styles.btnSignIn}
-            onPress={this.onHandleToHome}>
+            onPress={this.onSumbitData}>
             <Text style={{textAlign: 'center'}}>Sign In</Text>
           </TouchableOpacity>
         </View>
@@ -114,9 +153,6 @@ export default class LoginScreen extends Component {
           <TouchableOpacity onPress={this.onHandleToSignUp}>
             <Text> Don't have an account? Sign up free</Text>
           </TouchableOpacity>
-        </View>
-        <View>
-          <Text></Text>
         </View>
       </View>
     );

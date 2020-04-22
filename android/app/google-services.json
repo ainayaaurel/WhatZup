@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "1069305032577",
-    "firebase_url": "https://talkto-chat.firebaseio.com",
-    "project_id": "talkto-chat",
-    "storage_bucket": "talkto-chat.appspot.com"
+    "project_number": "283747797006",
+    "firebase_url": "https://realtime-chat-24702.firebaseio.com",
+    "project_id": "realtime-chat-24702",
+    "storage_bucket": "realtime-chat-24702.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1069305032577:android:fb8332f417b52b597ec280",
+        "mobilesdk_app_id": "1:283747797006:android:b9564b9b4f4ef6c536945f",
         "android_client_info": {
-          "package_name": "com.talkto"
+          "package_name": "com.talktoapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1069305032577-87gvbhejf5hpb0crek2vegi2k2r02jbe.apps.googleusercontent.com",
+          "client_id": "283747797006-tu1mrnfgh51d6t7n0c0b5ej2utr443e5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDs_JTFhOAXY_YBA3mqb9MS8oeWPjyWvsc"
+          "current_key": "AIzaSyCiIu5JLItCrKUdBt-eAp2njU2dXjYexNA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1069305032577-87gvbhejf5hpb0crek2vegi2k2r02jbe.apps.googleusercontent.com",
+              "client_id": "283747797006-tu1mrnfgh51d6t7n0c0b5ej2utr443e5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

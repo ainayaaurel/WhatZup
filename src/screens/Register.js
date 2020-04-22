@@ -6,9 +6,41 @@ import IconEmail from 'react-native-vector-icons/Fontisto';
 import IconPass from 'react-native-vector-icons/FontAwesome';
 import IconPhone from 'react-native-vector-icons/Entypo';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+// import {connect} from 'react-redux';
+// import {Register} from '../redux/actions/ActionsAuth';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
-export default class Register extends Component {
+class RegisterScreen extends Component {
+  state = {
+    name: '',
+    contact: '',
+    email: '',
+    password: '',
+  };
+
   onHandleToLogin = () => {
+    this.props.navigation.navigate('Login');
+  };
+
+  onSubmitData = (e) => {
+    e.preventDefault();
+    auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        auth().onAuthStateChanged((UserData) =>
+          database()
+            .ref(`users/${UserData.uid}`)
+            .set({
+              name: this.state.name,
+              contact: this.state.contact,
+              email: this.state.email,
+              password: this.state.password,
+            })
+            .catch((error) => console.log(error)),
+        );
+      });
+    // this.props.Register(data);
     this.props.navigation.navigate('Login');
   };
 
@@ -49,6 +81,7 @@ export default class Register extends Component {
                   marginRight: 10,
                   paddingBottom: 0,
                 }}
+                onChangeText={(text) => this.setState({name: text})}
                 leftIcon={<Icon name="user" size={24} color="black" />}
               />
             </View>
@@ -71,6 +104,7 @@ export default class Register extends Component {
                   marginRight: 10,
                   paddingBottom: 0,
                 }}
+                onChangeText={(text) => this.setState({phone: text})}
                 leftIcon={<IconPhone name="phone" size={24} color="black" />}
               />
             </View>
@@ -93,6 +127,7 @@ export default class Register extends Component {
                   marginRight: 10,
                   paddingBottom: 0,
                 }}
+                onChangeText={(text) => this.setState({email: text})}
                 leftIcon={<IconEmail name="email" size={24} color="black" />}
               />
               <View>
@@ -114,6 +149,7 @@ export default class Register extends Component {
                     marginRight: 10,
                     paddingBottom: 0,
                   }}
+                  onChangeText={(text) => this.setState({password: text})}
                   leftIcon={<IconPass name="lock" size={24} color="black" />}
                 />
               </View>
@@ -144,10 +180,10 @@ export default class Register extends Component {
                 <Button
                   containerStyle={{marginTop: 20, paddingHorizontal: 30}}
                   title="Sign Up"
-                  onPress={this.onHandleToLogin}
+                  onPress={this.onSubmitData}
                 />
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.onHandleToLogin}>
                 <Text style={{textAlign: 'center', marginTop: 20}}>
                   Already have an account yet? Sign In
                 </Text>
@@ -159,3 +195,7 @@ export default class Register extends Component {
     );
   }
 }
+
+export default RegisterScreen;
+
+// connect(null, {Register})
