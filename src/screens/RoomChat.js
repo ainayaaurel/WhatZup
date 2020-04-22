@@ -80,6 +80,9 @@ export default class Chat extends Component {
     return <Text style={styles.time}>{date}</Text>;
   };
 
+  onHandleToFriendProfile = () => {
+    this.props.navigation.navigate('Friend Profile');
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -87,7 +90,7 @@ export default class Chat extends Component {
           containerStyle={{marginTop: -30}}
           leftComponent={{icon: 'menu', color: '#fff'}}
           centerComponent={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.onHandleToFriendProfile}>
               <Text>Aldipea</Text>
             </TouchableOpacity>
           }

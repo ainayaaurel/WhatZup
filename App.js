@@ -13,6 +13,8 @@ import ForgotPassword from './src/screens/ForgotPassword';
 import ForgotPassword2 from './src/screens/ForgotPassword2';
 import Chat from './src/screens/Chat';
 import RoomChat from './src/screens/RoomChat';
+import FriendProfile from './src/screens/FriendsProfile';
+import Maps from './src/screens/maps';
 
 const Stack = createStackNavigator();
 
@@ -24,8 +26,8 @@ class App extends Component {
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen
-                name="Register"
-                component={Register}
+                name="Maps"
+                component={Maps}
                 options={{headerShown: false}}
               />
               <Stack.Screen
@@ -33,6 +35,22 @@ class App extends Component {
                 component={RoomChat}
                 options={{headerShown: false}}
               />
+              <Stack.Screen
+                name="MainHome"
+                component={BottomStack}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Friend Profile"
+                component={FriendProfile}
+                options={{headerShown: true}}
+              />
+              <Stack.Screen
+                name="Register"
+                component={Register}
+                options={{headerShown: false}}
+              />
+
               <Stack.Screen
                 name="Login"
                 component={Login}
@@ -54,11 +72,6 @@ class App extends Component {
             component={Chat}
             options={{headerShown: false}}
           /> */}
-              <Stack.Screen
-                name="MainHome"
-                component={BottomStack}
-                options={{headerShown: false}}
-              />
             </Stack.Navigator>
           </NavigationContainer>
         </PersistGate>
