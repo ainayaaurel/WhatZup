@@ -5,11 +5,8 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Alert,
-  ScrollView,
   TextInput,
   FlatList,
-  Button,
 } from 'react-native';
 import {Header} from 'react-native-elements';
 import database from '@react-native-firebase/database';
@@ -19,8 +16,8 @@ export default class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: 'Aldi Pranata',
-      uid: 'evuEpl68fIOc18f7lrYLQYwam9O2',
+      name: '',
+      uid: '',
       currentUser: {},
       textMessage: '',
       messageList: [],
@@ -57,6 +54,7 @@ export default class Chat extends Component {
   sendMessage = async () => {
     if (this.state.textMessage.length > 0) {
       try {
+        ('messages/');
         console.log('aaaaa');
         let msgId = (
           await database()
@@ -80,7 +78,12 @@ export default class Chat extends Component {
             msgId
         ] = message;
         updates[
-          this.state.uid + '/' + this.state.currentUser.uid + '/' + msgId
+          'messages/' +
+            this.state.uid +
+            '/' +
+            this.state.currentUser.uid +
+            '/' +
+            msgId
         ] = message;
         database().ref().update(updates);
         this.setState({textMessage: ''});
@@ -97,13 +100,14 @@ export default class Chat extends Component {
     this.props.navigation.navigate('Friend Profile');
   };
   render() {
+    console.log(this.props.routes.params.item);
     return (
       <View style={styles.container}>
         <Header
           containerStyle={{marginTop: -30}}
           leftComponent={{icon: 'menu', color: '#fff'}}
           centerComponent={
-            <TouchableOpacity onPress={this.onHandleToFriendProfile}>
+            <TouchableOpacity onPress={this.props.routes.params.users}>
               <Text>Aldipea</Text>
             </TouchableOpacity>
           }

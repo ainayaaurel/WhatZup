@@ -3,6 +3,7 @@ import {View, Text, FlatList} from 'react-native';
 import {SearchBar, ListItem, Avatar, Badge} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 class Chat extends Component {
   state = {
     search: '',
@@ -29,9 +30,9 @@ class Chat extends Component {
         });
       });
   }
-  componentWillMount() {
-    this.state.dbRef.off;
-  }
+  // componentWillMount() {
+  //   this.state.dbRef.off;
+  // }
   render() {
     const {search} = this.state;
     return (
@@ -45,29 +46,36 @@ class Chat extends Component {
           value={search}
         />
         <FlatList
-          data={list}
+          data={this.state.users}
           renderItem={({item}) => (
-            <ListItem
-              title={item.name}
-              subtitle={item.subtitle}
-              bottomDivider
-              chevron
-              leftElement={() => (
-                <View>
-                  <Avatar
-                    rounded
-                    source={{
-                      uri:
-                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                    }}
-                  />
-                  <Badge
-                    status="success"
-                    containerStyle={{position: 'absolute', top: -4, right: -4}}
-                  />
-                </View>
-              )}
-            />
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Room Chat', item)}>
+              <ListItem
+                title={item.name}
+                subtitle={item.subtitle}
+                bottomDivider
+                chevron
+                leftElement={() => (
+                  <View>
+                    <Avatar
+                      rounded
+                      source={{
+                        uri:
+                          'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                      }}
+                    />
+                    <Badge
+                      status="success"
+                      containerStyle={{
+                        position: 'absolute',
+                        top: -4,
+                        right: -4,
+                      }}
+                    />
+                  </View>
+                )}
+              />
+            </TouchableOpacity>
           )}
         />
       </View>

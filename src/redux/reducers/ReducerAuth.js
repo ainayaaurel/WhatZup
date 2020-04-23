@@ -1,23 +1,22 @@
 const initialState = {
-  profile: {},
+  users: {},
+  isLogin: false,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case 'LOGIN_PENDING':
+    case 'IS_LOGIN':
       return {
         ...state,
-        profile: {},
+        users: action.payload,
+        isLogin: true,
       };
-    case 'LOGIN_REJECTED':
+    case 'IS_LOGOUT':
       return {
         ...state,
-        profile: {},
+        isLogin: false,
       };
-    case 'LOGIN_FULFILLED':
-      return {
-        ...state,
-        profile: action.payload,
-      };
+    default:
+      return state;
   }
 }

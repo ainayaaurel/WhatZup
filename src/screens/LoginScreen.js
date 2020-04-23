@@ -15,6 +15,8 @@ import IconPass from 'react-native-vector-icons/Feather';
 // import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import {setLogin} from '../redux/actions/ActionsAuth';
+import {connect} from 'react-redux';
 
 // style={styles.inputIcon}
 
@@ -71,30 +73,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
   state = {
     email: '',
     password: '',
   };
 
-  onSumbitData = (e) => {
-    auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => {
-        auth().onAuthStateChanged((Users) => {
-          database()
-            .ref(`users/${Users.uid}`)
-            .once('value')
-            .then((data) => {
-              console.log('mudahkanlah ya Allah', data.val());
-            });
-          this.props.navigation.navigate('Chat Room');
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        Alert.alert('Wrong Email Or Password');
-      });
+  onSumbitData = () => {
+    this.props.setLogin(this.state.email, this.state.password);
   };
   handleChange = (key) => (val) => {
     this.setState({[key]: val});
@@ -158,3 +144,9 @@ export default class LoginScreen extends Component {
     );
   }
 }
+
+const mapDispatchToProps = {
+  setLogin,
+};
+
+export default connect(null, mapDispatchToProps)(LoginScreen);

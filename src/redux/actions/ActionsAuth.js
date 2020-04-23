@@ -1,25 +1,44 @@
 import database from '@react-native-firebase/database';
-// import firebase from 'firebase';
-// import auth from '@react-native-firebase/auth';
-import AsyncStorage from '@react-native-community/async-storage';
-import {ToastAndroid} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import {ToastAndroid, Alert} from 'react-native';
+import {error} from 'react-native-gifted-chat/lib/utils';
 
-// export const isLogin = (email, password) => async dispatch => {
-//   try {
-//     const login = await database().ref('users/').set({email, password})
-//     if(login) {
-//       dispatch({
-//         type: 'IS_LOGIN',
-//         payload:
-//       })
-//     } else {
-//       ToastAndroid.show('Wrong Username or Password'), ToastAndroid.SHORT
-//     }
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+export const setLogin = (email, password) => async (dispatch) => {
+  try {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        auth().onAuthStateChanged((Users) => {
+          database()
+            .ref(`users/${Users.uid}`)
+            .once('value')
+            .then((data) => {
+              console.log(data.val());
+              dispatch({
+                type: 'IS_LOGIN',
+                payload: data.val(),
+              });
+            });
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert('Wrong Email Or Password');
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+export const setLogOut = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'IS_LOGOUT',
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 // export const Register = (data) => {
 //   firebase
 //     .auth()
