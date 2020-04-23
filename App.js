@@ -26,8 +26,8 @@ class App extends Component {
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen
-                name="Maps"
-                component={Maps}
+                name="Login"
+                component={Login}
                 options={{headerShown: false}}
               />
               <Stack.Screen
@@ -35,6 +35,12 @@ class App extends Component {
                 component={RoomChat}
                 options={{headerShown: false}}
               />
+              <Stack.Screen
+                name="Maps"
+                component={Maps}
+                options={{headerShown: false}}
+              />
+
               <Stack.Screen
                 name="MainHome"
                 component={BottomStack}
@@ -48,12 +54,6 @@ class App extends Component {
               <Stack.Screen
                 name="Register"
                 component={Register}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="Login"
-                component={Login}
                 options={{headerShown: false}}
               />
 

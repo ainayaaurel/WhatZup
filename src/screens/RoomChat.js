@@ -12,70 +12,83 @@ import {
   Button,
 } from 'react-native';
 import {Header} from 'react-native-elements';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
 export default class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-        {
-          id: 1,
-          date: '9:50 am',
-          type: 'in',
-          message: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          id: 2,
-          date: '9:50 am',
-          type: 'out',
-          message: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          id: 3,
-          date: '9:50 am',
-          type: 'in',
-          message: 'Lorem ipsum dolor sit a met',
-        },
-        {
-          id: 4,
-          date: '9:50 am',
-          type: 'in',
-          message: 'Lorem ipsum dolor sit a met',
-        },
-        {
-          id: 5,
-          date: '9:50 am',
-          type: 'out',
-          message: 'Lorem ipsum dolor sit a met',
-        },
-        {
-          id: 6,
-          date: '9:50 am',
-          type: 'out',
-          message: 'Lorem ipsum dolor sit a met',
-        },
-        {
-          id: 7,
-          date: '9:50 am',
-          type: 'in',
-          message: 'Lorem ipsum dolor sit a met',
-        },
-        {
-          id: 8,
-          date: '9:50 am',
-          type: 'in',
-          message: 'Lorem ipsum dolor sit a met',
-        },
-        {
-          id: 9,
-          date: '9:50 am',
-          type: 'in',
-          message: 'Lorem ipsum dolor sit a met',
-        },
-      ],
+      name: 'Aldi Pranata',
+      uid: 'evuEpl68fIOc18f7lrYLQYwam9O2',
+      currentUser: {},
+      textMessage: '',
+      messageList: [],
     };
   }
+  componentDidMount() {
+    auth().onAuthStateChanged((userId) => {
+      console.log(userId.uid, 'HHHHH');
+      this.setState({currentUser: userId._user});
+      database()
+        .ref('/messages/')
+        .child(`/${userId.uid}/`)
+        .child(`/${this.state.uid}/`)
+        .on('child_added', (value) => {
+          this.setState((prevState) => {
+            return {
+              messageList: [...prevState.messageList, value.val()],
+            };
+          });
+        });
+    });
+  }
 
+  convertTime = (time) => {
+    let d = new Date(time);
+    let c = new Date();
+    let results = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':';
+    results += (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    if (c.getDay() !== d.getDay()) {
+      results = d.getDay() + '' + d.getMonth() + '' + results;
+    }
+    return results;
+  };
+  sendMessage = async () => {
+    if (this.state.textMessage.length > 0) {
+      try {
+        console.log('aaaaa');
+        let msgId = (
+          await database()
+            .ref('messages/')
+            .child(`/${this.state.currentUser.uid}/`)
+            .child(`/${this.state.uid}/`)
+            .push()
+        ).key;
+        let updates = {};
+        let message = {
+          message: this.state.textMessage,
+          time: database.ServerValue.TIMESTAMP,
+          from: this.state.currentUser.uid,
+        };
+        updates[
+          'messages/' +
+            this.state.currentUser.uid +
+            '/' +
+            this.state.uid +
+            '/' +
+            msgId
+        ] = message;
+        updates[
+          this.state.uid + '/' + this.state.currentUser.uid + '/' + msgId
+        ] = message;
+        database().ref().update(updates);
+        this.setState({textMessage: ''});
+      } catch (error) {
+        console.log({error});
+      }
+    }
+  };
   renderDate = (date) => {
     return <Text style={styles.time}>{date}</Text>;
   };
@@ -98,7 +111,7 @@ export default class Chat extends Component {
         />
         <FlatList
           style={styles.list}
-          data={this.state.data}
+          data={this.state.messageList}
           keyExtractor={(item) => {
             return item.id;
           }}
@@ -124,11 +137,11 @@ export default class Chat extends Component {
               style={styles.inputs}
               placeholder="Write a message..."
               underlineColorAndroid="transparent"
-              onChangeText={(name_address) => this.setState({name_address})}
+              onChangeText={(text) => this.setState({textMessage: text})}
             />
           </View>
 
-          <TouchableOpacity style={styles.btnSend}>
+          <TouchableOpacity style={styles.btnSend} onPress={this.sendMessage}>
             <Image
               source={{
                 uri: 'https://png.icons8.com/small/75/ffffff/filled-sent.png',

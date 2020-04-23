@@ -1,30 +1,37 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList} from 'react-native';
 import {SearchBar, ListItem, Avatar, Badge} from 'react-native-elements';
-
-const list = [
-  {
-    name: 'Amy Farha',
-    avatar_url:
-      'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-    subtitle: 'Vice President',
-  },
-  {
-    name: 'Chris Jackson',
-    avatar_url:
-      'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-    subtitle: 'Vice Chairman',
-  },
-];
-
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 class Chat extends Component {
   state = {
     search: '',
+    users: [],
   };
 
   updateSearch = (search) => {
     this.setState({search});
   };
+
+  componentDidMount() {
+    this.getDataUser();
+  }
+  getDataUser() {
+    database()
+      .ref('users/')
+      .on('value', (snapshot) => {
+        const current_user = auth().currentUser.uid;
+        const data = snapshot.val();
+        const user = Object.values(data);
+        const result = user.filter((user) => user.uid !== current_user);
+        this.setState({
+          users: result,
+        });
+      });
+  }
+  componentWillMount() {
+    this.state.dbRef.off;
+  }
   render() {
     const {search} = this.state;
     return (

@@ -88,7 +88,7 @@ export default class LoginScreen extends Component {
             .then((data) => {
               console.log('mudahkanlah ya Allah', data.val());
             });
-          this.props.navigation.navigate('MainHome');
+          this.props.navigation.navigate('Chat Room');
         });
       })
       .catch((error) => {
