@@ -11,6 +11,9 @@ import {
 import {Header} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Iconsend from 'react-native-vector-icons/Ionicons';
+import IconSett from 'react-native-vector-icons/AntDesign';
 
 export default class Chat extends Component {
   constructor(props) {
@@ -100,18 +103,22 @@ export default class Chat extends Component {
     this.props.navigation.navigate('Friend Profile');
   };
   render() {
-    console.log(this.props.routes.params.item);
     return (
       <View style={styles.container}>
         <Header
-          containerStyle={{marginTop: -30}}
-          leftComponent={{icon: 'menu', color: '#fff'}}
-          centerComponent={
-            <TouchableOpacity onPress={this.props.routes.params.users}>
-              <Text>Aldipea</Text>
+          containerStyle={{marginTop: -30, backgroundColor: '#FF941F'}}
+          leftComponent={
+            <TouchableOpacity>
+              <Icon name="keyboard-backspace" color="#fff" size={30} />
             </TouchableOpacity>
           }
-          rightComponent={{icon: 'home', color: '#fff'}}
+          centerComponent={
+            <TouchableOpacity onPress={this.onHandleToFriendProfile}>
+              <Text style={{fontSize: 18, color: '#fff', fontWeight: 'bold'}}>
+                {this.props.route.params.name}
+              </Text>
+            </TouchableOpacity>
+          }
         />
         <FlatList
           style={styles.list}
@@ -146,12 +153,7 @@ export default class Chat extends Component {
           </View>
 
           <TouchableOpacity style={styles.btnSend} onPress={this.sendMessage}>
-            <Image
-              source={{
-                uri: 'https://png.icons8.com/small/75/ffffff/filled-sent.png',
-              }}
-              style={styles.iconSend}
-            />
+            <Iconsend name="md-send" color="#fff" size={23} />
           </TouchableOpacity>
         </View>
       </View>

@@ -17,10 +17,31 @@ class RegisterScreen extends Component {
     contact: '',
     email: '',
     password: '',
+    passwordError: null,
+    confirmPassword: '',
+    confirmPasswordError: null,
   };
 
   onHandleToLogin = () => {
     this.props.navigation.navigate('Login');
+  };
+
+  checkPassword = () => {
+    const {password} = this.state;
+    if (password.length < 6) {
+      this.setState({passwordError: 'Password must be at least 6 characters'});
+    } else {
+      this.setState({passwordError: null});
+    }
+  };
+
+  checkConfirmPass = () => {
+    const {confirmPassword, password} = this.state;
+    if (confirmPassword !== password) {
+      this.setState({confirmPasswordError: 'Passwords does not match'});
+    } else {
+      this.setState({confirmPasswordError: null});
+    }
   };
 
   onSubmitData = (e) => {
@@ -150,6 +171,13 @@ class RegisterScreen extends Component {
                     paddingBottom: 0,
                   }}
                   onChangeText={(text) => this.setState({password: text})}
+                  onBlur={() => this.checkPassword()}
+                  errorStyle={{color: 'red'}}
+                  errorMessage={
+                    !this.state.passwordError
+                      ? false
+                      : 'Password must be at least 6 characters'
+                  }
                   leftIcon={<IconPass name="lock" size={24} color="black" />}
                 />
               </View>
@@ -172,6 +200,16 @@ class RegisterScreen extends Component {
                     marginRight: 10,
                     paddingBottom: 0,
                   }}
+                  onChangeText={(text) =>
+                    this.setState({confirmPassword: text})
+                  }
+                  onBlur={() => this.checkConfirmPass()}
+                  errorStyle={{color: 'red'}}
+                  errorMessage={
+                    !this.state.confirmPasswordError
+                      ? false
+                      : 'Passwords do not match'
+                  }
                   leftIcon={<IconPass name="lock" size={24} color="black" />}
                 />
               </View>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList} from 'react-native';
-import {SearchBar, ListItem, Avatar, Badge} from 'react-native-elements';
+import {SearchBar, ListItem, Avatar, Header} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -37,10 +37,26 @@ class Chat extends Component {
     const {search} = this.state;
     return (
       <View>
+        <Header
+          containerStyle={{marginTop: -30, backgroundColor: '#FF941F'}}
+          centerComponent={{text: 'TALKTO', style: {color: '#fff'}}}
+        />
         <SearchBar
-          containerStyle={{borderRadius: 20, backgroundColor: '#fff'}}
-          inputContainerStyle={{backgroundColor: '#fff'}}
-          placeholderTextColor={{backgroundColor: '#fff'}}
+          containerStyle={{
+            borderRadius: 20,
+            backgroundColor: '#fff',
+            borderTopColor: 0,
+            borderBottomColor: 0,
+          }}
+          inputContainerStyle={{
+            backgroundColor: '#fff',
+            borderRadius: 20,
+          }}
+          inputStyle={{
+            marginVertical: 0,
+            paddingVertical: 0,
+          }}
+          placeholderTextColor={{backgroundColor: '#FF941F'}}
           placeholder="Search ..."
           onChangeText={this.updateSearch}
           value={search}
@@ -52,9 +68,9 @@ class Chat extends Component {
               onPress={() => this.props.navigation.navigate('Room Chat', item)}>
               <ListItem
                 title={item.name}
-                subtitle={item.subtitle}
+                subtitle="online"
+                rightSubtitle="17.30"
                 bottomDivider
-                chevron
                 leftElement={() => (
                   <View>
                     <Avatar
@@ -62,14 +78,6 @@ class Chat extends Component {
                       source={{
                         uri:
                           'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                      }}
-                    />
-                    <Badge
-                      status="success"
-                      containerStyle={{
-                        position: 'absolute',
-                        top: -4,
-                        right: -4,
                       }}
                     />
                   </View>
