@@ -14,8 +14,9 @@ import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Iconsend from 'react-native-vector-icons/Ionicons';
 import IconSett from 'react-native-vector-icons/AntDesign';
+import {connect} from 'react-redux';
 
-export default class Chat extends Component {
+class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,9 +30,12 @@ export default class Chat extends Component {
   componentDidMount() {
     auth().onAuthStateChanged((userId) => {
       console.log(userId.uid, 'HHHHH');
-      this.setState({currentUser: userId._user});
+      this.setState({
+        currentUser: userId._user,
+        uid: this.props.route.params.uid,
+      });
       database()
-        .ref('/messages/')
+        .ref('messages/')
         .child(`/${userId.uid}/`)
         .child(`/${this.state.uid}/`)
         .on('child_added', (value) => {
@@ -102,7 +106,21 @@ export default class Chat extends Component {
   onHandleToFriendProfile = () => {
     this.props.navigation.navigate('Friend Profile');
   };
+
+  keyboardEvent = (event, isShow) => {
+    Animated.parallel([
+      Animated.timing(this.keyboardHeight, {
+        duration: event.duration,
+        toValue: isShow ? 60 : 0,
+      }),
+      Animated.timing(this.bottomPadding, {
+        duration: event.duration,
+        toValue: isShow ? 120 : 60,
+      }),
+    ]).start();
+  };
   render() {
+    console.disableYellowBox = true;
     return (
       <View style={styles.container}>
         <Header
@@ -121,6 +139,11 @@ export default class Chat extends Component {
           }
         />
         <FlatList
+          ref={(ref) => (this.flatList = ref)}
+          onContentSizeChange={() =>
+            this.flatList.scrollToEnd({animated: true})
+          }
+          onLayout={() => this.flatList.scrollToEnd({animated: true})}
           style={styles.list}
           data={this.state.messageList}
           keyExtractor={(item) => {
@@ -129,7 +152,7 @@ export default class Chat extends Component {
           renderItem={(message) => {
             console.log(item);
             const item = message.item;
-            let inMessage = item.type === 'in';
+            let inMessage = item.from !== this.state.currentUser.uid;
             let itemStyle = inMessage ? styles.itemIn : styles.itemOut;
             return (
               <View style={[styles.item, itemStyle]}>
@@ -145,10 +168,12 @@ export default class Chat extends Component {
         <View style={styles.footer}>
           <View style={styles.inputContainer}>
             <TextInput
+              value={this.state.textMessage}
               style={styles.inputs}
               placeholder="Write a message..."
               underlineColorAndroid="transparent"
               onChangeText={(text) => this.setState({textMessage: text})}
+              multiline={true}
             />
           </View>
 
@@ -200,15 +225,16 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   inputs: {
-    height: 40,
+    height: 50,
     marginLeft: 16,
     borderBottomColor: '#FFFFFF',
     flex: 1,
+    paddingRight: 15,
   },
   balloon: {
-    maxWidth: 250,
-    padding: 15,
-    borderRadius: 20,
+    maxWidth: 280,
+    padding: 10,
+    borderRadius: 15,
   },
   itemIn: {
     alignSelf: 'flex-start',
@@ -231,3 +257,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 });
+
+const mapStateToProps = (state) => ({
+  currentUser: state.login,
+});
+
+export default connect(mapStateToProps, null)(Chat);

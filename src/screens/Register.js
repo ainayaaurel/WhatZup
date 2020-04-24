@@ -14,16 +14,12 @@ import auth from '@react-native-firebase/auth';
 class RegisterScreen extends Component {
   state = {
     name: '',
-    contact: '',
+    phone: '',
     email: '',
     password: '',
     passwordError: null,
     confirmPassword: '',
     confirmPasswordError: null,
-  };
-
-  onHandleToLogin = () => {
-    this.props.navigation.navigate('Login');
   };
 
   checkPassword = () => {
@@ -54,15 +50,18 @@ class RegisterScreen extends Component {
             .ref(`users/${UserData.uid}`)
             .set({
               name: this.state.name,
-              contact: this.state.contact,
+              phone: this.state.phone,
               email: this.state.email,
               password: this.state.password,
+              uid: UserData.uid,
+            })
+            .then(() => {
+              this.props.navigation.navigate('Login');
             })
             .catch((error) => console.log(error)),
         );
       });
     // this.props.Register(data);
-    this.props.navigation.navigate('Login');
   };
 
   render() {

@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 import {SearchBar, ListItem, Avatar, Header} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {connect} from 'react-redux';
+import {setLogin} from '../redux/actions/ActionsAuth';
+
 class Chat extends Component {
   state = {
     search: '',
@@ -22,6 +24,7 @@ class Chat extends Component {
       .ref('users/')
       .on('value', (snapshot) => {
         const current_user = auth().currentUser.uid;
+        console.log('hahaha', current_user);
         const data = snapshot.val();
         const user = Object.values(data);
         const result = user.filter((user) => user.uid !== current_user);
@@ -90,4 +93,9 @@ class Chat extends Component {
     );
   }
 }
-export default Chat;
+
+const mapStateToProps = (state) => ({
+  currentUser: state.login,
+});
+
+export default connect(mapStateToProps, {setLogin})(Chat);

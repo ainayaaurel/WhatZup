@@ -29,11 +29,18 @@ class MainHome extends Component {
               options={{headerShown: false}}
             />
           ) : (
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{headerShown: false}}
-            />
+            <>
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Register"
+                component={Register}
+                options={{headerShown: false}}
+              />
+            </>
           )}
           <Stack.Screen
             name="Room Chat"
@@ -51,11 +58,6 @@ class MainHome extends Component {
             name="Friend Profile"
             component={FriendProfile}
             options={{headerShown: true}}
-          />
-          <Stack.Screen
-            name="Register"
-            component={Register}
-            options={{headerShown: false}}
           />
 
           <Stack.Screen
