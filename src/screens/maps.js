@@ -30,7 +30,7 @@ export default class maps extends Component {
           style={styles.map}
           showsUserLocation
           zoomControlEnabled
-          minZoomLevel={14}
+          minZoomLevel={0}
           initialRegion={{
             latitude: -6.6211252,
             longitude: 106.818001,

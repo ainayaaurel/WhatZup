@@ -10,6 +10,8 @@ import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 // import {Register} from '../redux/actions/ActionsAuth';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import Geolocation from '@react-native-community/geolocation';
+Geolocation.setRNConfiguration({skipPermissionRequests: true});
 
 class RegisterScreen extends Component {
   state = {
@@ -20,6 +22,7 @@ class RegisterScreen extends Component {
     passwordError: null,
     confirmPassword: '',
     confirmPasswordError: null,
+    location: [],
   };
 
   checkPassword = () => {
@@ -40,6 +43,14 @@ class RegisterScreen extends Component {
     }
   };
 
+  componentDidMount() {
+    Geolocation.getCurrentPosition((location) => {
+      return this.setState({
+        location: location,
+      });
+    });
+  }
+
   onSubmitData = (e) => {
     e.preventDefault();
     auth()
@@ -54,6 +65,8 @@ class RegisterScreen extends Component {
               email: this.state.email,
               password: this.state.password,
               uid: UserData.uid,
+              longitude: this.state.location.coords.longitude,
+              latitude: this.state.location.coords.latitude,
             })
             .then(() => {
               this.props.navigation.navigate('Login');

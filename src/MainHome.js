@@ -11,6 +11,7 @@ import Chat from '../src/screens/Chat';
 import RoomChat from '../src/screens/RoomChat';
 import FriendProfile from '../src/screens/FriendsProfile';
 import Maps from '../src/screens/maps';
+import UpdateProfile from '../src/screens/UploadProfile';
 
 import {setLogin} from '../src/redux/actions/ActionsAuth';
 import {connect} from 'react-redux';
@@ -57,6 +58,11 @@ class MainHome extends Component {
           <Stack.Screen
             name="Friend Profile"
             component={FriendProfile}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="Update Profile"
+            component={UpdateProfile}
             options={{headerShown: true}}
           />
 

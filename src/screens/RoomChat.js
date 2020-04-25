@@ -104,7 +104,7 @@ class Chat extends Component {
   };
 
   onHandleToFriendProfile = () => {
-    this.props.navigation.navigate('Friend Profile');
+    this.props.navigation.navigate('Friend Profile', this.props.route.params);
   };
 
   keyboardEvent = (event, isShow) => {

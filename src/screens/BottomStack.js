@@ -6,6 +6,7 @@ import IconUser from 'react-native-vector-icons/AntDesign';
 import IconChat from 'react-native-vector-icons/Ionicons';
 import Profile from './Profile';
 import Chat from './Chat';
+import Maps from './maps';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -20,6 +21,16 @@ class BottomStack extends Component {
             tabBarLabel: 'Chat',
             tabBarIcon: ({color, size}) => (
               <IconChat name="ios-chatbubbles" color={color} size={size} />
+            ),
+          }}
+        />
+        <BottomTab.Screen
+          component={Maps}
+          name="Maps"
+          options={{
+            tabBarLabel: 'Maps',
+            tabBarIcon: ({color, size}) => (
+              <IconUser name="user" color={color} size={size} />
             ),
           }}
         />

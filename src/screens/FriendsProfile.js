@@ -9,12 +9,29 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Avatar} from 'react-native-elements';
+import Geolocation from '@react-native-community/geolocation';
+import MapView from 'react-native-maps';
 
 export default class FriendsProfile extends Component {
+  state = {
+    latitude: 0,
+    longitude: 0,
+  };
+
   render() {
+    const marker = (
+      <MapView.Marker
+        coordinate={{
+          latitude: this.props.route.params.latitude,
+          longitude: this.props.route.params.longitude,
+        }}
+        title="Lala Location"
+        description="Hey"
+      />
+    );
     return (
-      <SafeAreaView>
-        <Image
+      <>
+        {/* <Image
           style={{
             width: '100%',
             height: '30%',
@@ -46,23 +63,39 @@ export default class FriendsProfile extends Component {
           <Text style={{color: 'red', fontSize: 19, marginLeft: 2}}>
             Report Contact
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <View style={{backgroundColor: 'white'}}>
-          <Image
-            style={{
-              width: '100%',
-              height: '65%',
-            }}
-            source={require('../assets/images/maps.jpeg')}
-          />
+        <View style={styles.containerMaps}>
+          <MapView
+            style={styles.map}
+            showsUserLocation
+            zoomControlEnabled
+            minZoomLevel={0}
+            initialRegion={{
+              latitude: this.props.route.params.latitude,
+              longitude: this.props.route.params.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}>
+            {marker}
+          </MapView>
         </View>
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  containerMaps: {
+    ...StyleSheet.absoluteFillObject,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
   coloumn: {
     flexDirection: 'row',
     backgroundColor: 'white',
