@@ -3,18 +3,28 @@ import {View, Text} from 'react-native';
 import {Avatar, Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconPhone from 'react-native-vector-icons/Entypo';
-import {setLogOut} from '../redux/actions/ActionsAuth';
+import {setLogin, setLogOut} from '../redux/actions/ActionsAuth';
 import {connect} from 'react-redux';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
 class Profile extends Component {
+  state = {
+    users: [],
+  };
+
   onHandleToUpdateProfile = () => {
     this.props.navigation.navigate('Update Profile');
   };
   render() {
     console.log(this.props.logout);
+
     return (
-      <View style={{paddingHorizontal: 20}}>
+      <View
+        style={{
+          marginHorizontal: 20,
+        }}>
         <View style={{alignItems: 'center', marginVertical: 10}}>
           <Avatar
             size="xlarge"
@@ -23,7 +33,6 @@ class Profile extends Component {
               uri:
                 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
             }}
-            showEditButton
           />
         </View>
         <View>
@@ -31,19 +40,22 @@ class Profile extends Component {
             containerStyle={{marginVertical: 10}}
             label="Name"
             leftIcon={<Icon name="user" size={24} color="black" />}
+            disabled={true}
+            value={this.props.user.users.name}
           />
         </View>
         <View>
-          <IconPhone name="phone" size={24} color="black" />
           <Input
             containerStyle={{marginVertical: 10}}
-            inputContainerStyle={{borderBottomWidth: 0}}
             label="Phone"
+            leftIcon={<IconPhone name="phone" size={24} color="black" />}
+            disabled={true}
+            value={this.props.user.users.phone}
           />
         </View>
 
         <TouchableOpacity onPress={this.onHandleToUpdateProfile}>
-          <Text>Edit Profile</Text>
+          <Text>Edit</Text>
         </TouchableOpacity>
 
         <Button
@@ -58,6 +70,7 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
   logout: state.login.isLogin,
+  user: state.login,
 });
 
-export default connect(mapStateToProps, {setLogOut})(Profile);
+export default connect(mapStateToProps, {setLogOut, setLogin})(Profile);

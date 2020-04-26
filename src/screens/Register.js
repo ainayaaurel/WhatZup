@@ -25,6 +25,9 @@ class RegisterScreen extends Component {
     location: [],
   };
 
+  onHandleToLogin = () => {
+    this.props.navigation.navigate('Login');
+  };
   checkPassword = () => {
     const {password} = this.state;
     if (password.length < 6) {
@@ -74,7 +77,6 @@ class RegisterScreen extends Component {
             .catch((error) => console.log(error)),
         );
       });
-    // this.props.Register(data);
   };
 
   render() {
@@ -91,7 +93,11 @@ class RegisterScreen extends Component {
           <View style={{marginTop: 40}}>
             <View>
               <Text
-                style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold'}}>
+                style={{
+                  textAlign: 'center',
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}>
                 Create Account
               </Text>
             </View>

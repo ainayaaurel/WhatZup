@@ -38,6 +38,7 @@ class Chat extends Component {
   // }
   render() {
     const {search} = this.state;
+    console.disableYellowBox = true;
     return (
       <View>
         <Header
