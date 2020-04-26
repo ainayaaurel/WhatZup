@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Avatar, Input} from 'react-native-elements';
+import {Avatar, Input, Button} from 'react-native-elements';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
@@ -67,6 +67,11 @@ export default class UploadProfile extends Component {
             leftIcon={<Icon name="user" size={24} color="black" />}
           />
         </View>
+
+        <Button
+          title="upload"
+          onPress={() => this.props.navigation.navigate('Profile')}
+        />
       </View>
     );
   }

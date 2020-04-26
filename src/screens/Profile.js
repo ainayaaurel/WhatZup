@@ -26,14 +26,16 @@ class Profile extends Component {
           marginHorizontal: 20,
         }}>
         <View style={{alignItems: 'center', marginVertical: 10}}>
-          <Avatar
-            size="xlarge"
-            rounded
-            source={{
-              uri:
-                'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-            }}
-          />
+          <TouchableOpacity onPress={this.onHandleToUpdateProfile}>
+            <Avatar
+              size="xlarge"
+              rounded
+              source={{
+                uri:
+                  'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View>
           <Input
@@ -53,10 +55,6 @@ class Profile extends Component {
             value={this.props.user.users.phone}
           />
         </View>
-
-        <TouchableOpacity onPress={this.onHandleToUpdateProfile}>
-          <Text>Edit</Text>
-        </TouchableOpacity>
 
         <Button
           containerStyle={{marginTop: 10}}

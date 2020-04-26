@@ -134,7 +134,7 @@ class RegisterScreen extends Component {
                   borderBottomWidth: 1,
                 }}
                 containerStyle={{marginVertical: 10}}
-                inputStyle={{color: 'red', fontSize: 15}}
+                inputStyle={{color: 'black', fontSize: 15}}
                 label="Phone"
                 labelStyle={{fontSize: 15}}
                 placeholder="your number phone"
@@ -157,7 +157,7 @@ class RegisterScreen extends Component {
                   borderBottomWidth: 1,
                 }}
                 containerStyle={{marginVertical: 10}}
-                inputStyle={{color: 'red', fontSize: 15}}
+                inputStyle={{color: 'black', fontSize: 15}}
                 labelStyle={{fontSize: 15}}
                 label="Email Addrees"
                 placeholder="your email address"
@@ -179,7 +179,7 @@ class RegisterScreen extends Component {
                     borderBottomWidth: 1,
                   }}
                   containerStyle={{marginVertical: 10}}
-                  inputStyle={{color: 'red', fontSize: 15}}
+                  inputStyle={{color: 'black', fontSize: 15}}
                   label="Password"
                   labelStyle={{fontSize: 15}}
                   placeholder="your password"
@@ -209,7 +209,7 @@ class RegisterScreen extends Component {
                     borderBottomWidth: 1,
                   }}
                   containerStyle={{marginVertical: 10}}
-                  inputStyle={{color: 'red', fontSize: 15}}
+                  inputStyle={{color: 'black', fontSize: 15}}
                   label="Confirm Password"
                   labelStyle={{fontSize: 15}}
                   placeholder="confirm your password"
