@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 
 class Profile extends Component {
   state = {
@@ -15,7 +16,10 @@ class Profile extends Component {
   };
 
   onHandleToUpdateProfile = () => {
-    this.props.navigation.navigate('Update Profile');
+    const data = {
+      users: this.props.user.users,
+    };
+    this.props.navigation.navigate('Update Profile', data);
   };
   render() {
     console.log(this.props.logout);
@@ -31,8 +35,9 @@ class Profile extends Component {
               size="xlarge"
               rounded
               source={{
-                uri:
-                  'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                uri: this.props.route.params.image
+                  ? this.props.route.params.image
+                  : this.props.user.users.picture,
               }}
             />
           </TouchableOpacity>
