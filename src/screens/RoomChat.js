@@ -47,7 +47,9 @@ class Chat extends Component {
         });
     });
   }
-
+  onHandleToChat = () => {
+    this.props.navigation.navigate('Home');
+  };
   convertTime = (time) => {
     let d = new Date(time);
     let c = new Date();
@@ -126,7 +128,7 @@ class Chat extends Component {
         <Header
           containerStyle={{marginTop: -30, backgroundColor: '#FF941F'}}
           leftComponent={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.onHandleToChat}>
               <Icon name="keyboard-backspace" color="#fff" size={30} />
             </TouchableOpacity>
           }
@@ -159,6 +161,7 @@ class Chat extends Component {
                 {!inMessage && this.renderDate(item.date)}
                 <View style={[styles.balloon]}>
                   <Text>{item.message}</Text>
+                  <Text>{this.convertTime(item.time)}</Text>
                 </View>
                 {inMessage && this.renderDate(item.date)}
               </View>

@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
-import {Avatar} from 'react-native-elements';
+import {Avatar, Card, Button} from 'react-native-elements';
 import Geolocation from '@react-native-community/geolocation';
 import MapView from 'react-native-maps';
 
@@ -29,8 +29,9 @@ export default class FriendsProfile extends Component {
         description="Hey"
       />
     );
+
     return (
-      <>
+      <View>
         {/* <Image
           style={{
             width: '100%',
@@ -80,7 +81,27 @@ export default class FriendsProfile extends Component {
             {marker}
           </MapView>
         </View>
-      </>
+        <View>
+          <Card title="HELLO WORLD">
+            <View>
+              <Text style={{marginBottom: 10}}>
+                The idea with React Native Elements is more about component
+                structure than actual design.
+              </Text>
+              <Button
+                icon={<Icon name="code" color="#ffffff" />}
+                buttonStyle={{
+                  borderRadius: 0,
+                  marginLeft: 0,
+                  marginRight: 0,
+                  marginBottom: 0,
+                }}
+                title="VIEW NOW"
+              />
+            </View>
+          </Card>
+        </View>
+      </View>
     );
   }
 }
@@ -88,19 +109,13 @@ export default class FriendsProfile extends Component {
 const styles = StyleSheet.create({
   containerMaps: {
     ...StyleSheet.absoluteFillObject,
-    height: '100%',
+    height: 300,
     width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    // flex: 1,
+    // justifyContent: 'flex-end',
+    // alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-  },
-  coloumn: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    marginBottom: 5,
-    height: 50,
-    alignItems: 'center',
   },
 });

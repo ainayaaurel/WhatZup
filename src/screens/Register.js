@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Input, Button} from 'react-native-elements';
-import {View, Text} from 'react-native';
+import {View, Text, ToastAndroid} from 'react-native';
 import IconEmail from 'react-native-vector-icons/Fontisto';
 import IconPass from 'react-native-vector-icons/FontAwesome';
 import IconPhone from 'react-native-vector-icons/Entypo';
@@ -21,12 +21,37 @@ class RegisterScreen extends Component {
     password: '',
     passwordError: null,
     confirmPassword: '',
+    picture: '',
     confirmPasswordError: null,
+    phone: '',
+    phoneError: null,
+    email: '',
+    emailError: null,
     location: [],
+    loadingButton: false,
   };
 
   onHandleToLogin = () => {
     this.props.navigation.navigate('Login');
+  };
+  checkphone = () => {
+    const req = /^(^\+62\s?|^0)(\d{3,4}?){2}\d{3,4}$/;
+    console.log(req.test(this.state.phone));
+    if (!req.test(this.state.phone)) {
+      this.setState({phoneError: 'phone number is already in use'});
+    } else {
+      this.setState({phoneError: null});
+    }
+  };
+  checkemail = () => {
+    console.log('check email');
+    const req = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!req.test(this.state.email)) {
+      this.setState({emailError: 'email is already in use'});
+    } else {
+      this.setState({emailError: null});
+    }
   };
   checkPassword = () => {
     const {password} = this.state;
@@ -55,6 +80,7 @@ class RegisterScreen extends Component {
   }
 
   onSubmitData = (e) => {
+    this.setState({loadingButton: true});
     e.preventDefault();
     auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -67,6 +93,8 @@ class RegisterScreen extends Component {
               phone: this.state.phone,
               email: this.state.email,
               password: this.state.password,
+              picture:
+                'https://cdn2.iconfinder.com/data/icons/men-women-from-all-over-the-world-1/93/man-woman-people-person-avatar-face-user_49-512.png',
               uid: UserData.uid,
               longitude: this.state.location.coords.longitude,
               latitude: this.state.location.coords.latitude,
@@ -74,10 +102,35 @@ class RegisterScreen extends Component {
             .then(() => {
               this.props.navigation.navigate('Login');
             })
-            .catch((error) => console.log(error)),
+            .catch((error) => {
+              console.log(error.code, 'FICSSS');
+              if (error.code === 'auth/email-already-in-use') {
+                this.setState({loadingButton: false});
+                ToastAndroid.show('Email Already in used', ToastAndroid.SHORT);
+              }
+            }),
         );
+      })
+      .catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          this.setState({loadingButton: false});
+          ToastAndroid.show('Email Already in used', ToastAndroid.SHORT);
+        }
       });
   };
+
+  //     .catch(error => {
+  //       if (error.code === 'auth/email-already-in-use') {
+  //         console.log('That email address is already in use!');
+  //       }
+
+  //       if (error.code === 'auth/invalid-email') {
+  //         console.log('That email address is invalid!');
+  //       }
+
+  //       console.error(error);
+  //     };
+  // };
 
   render() {
     return (
@@ -143,7 +196,13 @@ class RegisterScreen extends Component {
                   marginRight: 10,
                   paddingBottom: 0,
                 }}
+                keyboardType="phone-pad"
                 onChangeText={(text) => this.setState({phone: text})}
+                onBlur={() => this.checkphone()}
+                errorStyle={{color: 'red'}}
+                errorMessage={
+                  !this.state.phoneError ? false : 'Required with your number'
+                }
                 leftIcon={<IconPhone name="phone" size={24} color="black" />}
               />
             </View>
@@ -160,13 +219,18 @@ class RegisterScreen extends Component {
                 inputStyle={{color: 'black', fontSize: 15}}
                 labelStyle={{fontSize: 15}}
                 label="Email Addrees"
-                placeholder="your email address"
+                placeholder="Ex.annisa@gmail.com"
                 leftIconContainerStyle={{
                   marginLeft: 10,
                   marginRight: 10,
                   paddingBottom: 0,
                 }}
                 onChangeText={(text) => this.setState({email: text})}
+                onBlur={() => this.checkemail()}
+                errorStyle={{color: 'red'}}
+                errorMessage={
+                  !this.state.emailError ? false : 'Required with your email'
+                }
                 leftIcon={<IconEmail name="email" size={24} color="black" />}
               />
               <View>
@@ -235,6 +299,7 @@ class RegisterScreen extends Component {
               <View>
                 <Button
                   containerStyle={{marginTop: 20, paddingHorizontal: 30}}
+                  loading={this.state.loadingButton}
                   title="Sign Up"
                   onPress={this.onSubmitData}
                 />

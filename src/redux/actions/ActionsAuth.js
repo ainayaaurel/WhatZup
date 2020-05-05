@@ -30,6 +30,19 @@ export const setLogin = (email, password) => async (dispatch) => {
   }
 };
 
+export const loadDataUser = (uid) => async (dispatch) => {
+  database()
+    .ref(`users/${uid}`)
+    .once('value')
+    .then((data) => {
+      console.log(data.val());
+      dispatch({
+        type: 'LOAD_DATA_USER',
+        payload: data.val(),
+      });
+    });
+};
+
 export const setLogOut = () => async (dispatch) => {
   try {
     dispatch({

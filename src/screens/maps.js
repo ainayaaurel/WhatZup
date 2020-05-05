@@ -44,16 +44,16 @@ export default class maps extends Component {
       });
   }
   render() {
-    const marker = this.state.users.map((item) => (
-      <MapView.Marker
-        coordinate={{
-          latitude: item.latitude,
-          longitude: item.longitude,
-        }}
-        title={item.name}
-        description={item.status}
-      />
-    ));
+    // const marker = this.state.users.map((item) => (
+    //   <MapView.Marker
+    //     coordinate={{
+    //       latitude: item.latitude,
+    //       longitude: item.longitude,
+    //     }}
+    //     title={item.name}
+    //     description={item.status}
+    //   />
+    // ));
     return (
       <View style={styles.container}>
         <MapView
@@ -67,7 +67,7 @@ export default class maps extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}>
-          {marker}
+          {/* {marker} */}
         </MapView>
       </View>
     );

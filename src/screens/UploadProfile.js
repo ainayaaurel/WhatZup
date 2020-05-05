@@ -6,12 +6,15 @@ import ImagePicker from 'react-native-image-picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
+import {connect} from 'react-redux';
+import {loadDataUser} from './../redux/actions/ActionsAuth';
 
-export default class UploadProfile extends Component {
+class UploadProfile extends Component {
   state = {
     picture: {
       uri: this.props.route.params.users.picture,
     },
+    name: '',
   };
 
   uriToBlob = (uri) => {
@@ -62,6 +65,7 @@ export default class UploadProfile extends Component {
         .child('picture')
         .set(imageUrl)
         .then(() => {
+          this.props.loadDataUser(id);
           this.props.navigation.navigate('Profile', {image: imageUrl});
         })
         .catch((err) => {
@@ -112,7 +116,7 @@ export default class UploadProfile extends Component {
                 size="xlarge"
                 rounded
                 source={{
-                  uri: this.state.picture.uri,
+                  uri: this.state.picture,
                 }}
                 showEditButton
               />
@@ -124,6 +128,8 @@ export default class UploadProfile extends Component {
             containerStyle={{marginVertical: 10}}
             label="Name"
             placeholder="Name"
+            value={this.props.route.params.users.name}
+            onChangeText={(text) => this.setState({name: text})}
             leftIcon={<Icon name="user" size={24} color="black" />}
           />
         </View>
@@ -133,3 +139,4 @@ export default class UploadProfile extends Component {
     );
   }
 }
+export default connect(null, {loadDataUser})(UploadProfile);

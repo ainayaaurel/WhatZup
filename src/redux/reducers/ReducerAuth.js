@@ -16,6 +16,11 @@ export default function (state = initialState, action) {
         ...state,
         isLogin: false,
       };
+    case 'LOAD_DATA_USER':
+      return {
+        ...state,
+        users: action.payload,
+      };
     default:
       return state;
   }

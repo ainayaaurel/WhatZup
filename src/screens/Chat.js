@@ -80,8 +80,7 @@ class Chat extends Component {
                     <Avatar
                       rounded
                       source={{
-                        uri:
-                          'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                        uri: item.picture,
                       }}
                     />
                   </View>

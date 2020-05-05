@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import {Avatar, Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconEdit from 'react-native-vector-icons/AntDesign';
 import IconPhone from 'react-native-vector-icons/Entypo';
 import {setLogin, setLogOut} from '../redux/actions/ActionsAuth';
 import {connect} from 'react-redux';
@@ -15,9 +16,16 @@ class Profile extends Component {
     users: [],
   };
 
+  onHandleToUpdateBiodata = () => {
+    const data = {
+      users: this.props.user.users,
+    };
+    this.props.navigation.navigate('Update Biodata', data);
+  };
   onHandleToUpdateProfile = () => {
     const data = {
       users: this.props.user.users,
+      image: this.props.user.users.picture,
     };
     this.props.navigation.navigate('Update Profile', data);
   };
@@ -35,21 +43,24 @@ class Profile extends Component {
               size="xlarge"
               rounded
               source={{
-                uri: this.props.route.params.image
-                  ? this.props.route.params.image
-                  : this.props.user.users.picture,
+                uri: this.props.user.users.picture,
+                // ? this.props.route.params.image
+                // : this.props.user.users.picture,
               }}
             />
           </TouchableOpacity>
         </View>
         <View>
-          <Input
-            containerStyle={{marginVertical: 10}}
-            label="Name"
-            leftIcon={<Icon name="user" size={24} color="black" />}
-            disabled={true}
-            value={this.props.user.users.name}
-          />
+          <TouchableOpacity onPress={this.onHandleToUpdateBiodata}>
+            <Input
+              containerStyle={{marginVertical: 10}}
+              label="Name"
+              leftIcon={<Icon name="user" size={23} color="black" />}
+              rightIcon={<IconEdit name="edit" color="black" size={25} />}
+              disabled={true}
+              value={this.props.user.users.name}
+            />
+          </TouchableOpacity>
         </View>
         <View>
           <Input
