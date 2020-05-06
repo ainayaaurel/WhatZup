@@ -47,6 +47,7 @@ class Chat extends Component {
         });
     });
   }
+
   onHandleToChat = () => {
     this.props.navigation.navigate('Home');
   };

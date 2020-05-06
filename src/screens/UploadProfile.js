@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Avatar, Input, Button} from 'react-native-elements';
-import {View} from 'react-native';
+import {View, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -86,12 +86,25 @@ class UploadProfile extends Component {
       },
     };
     ImagePicker.showImagePicker(options, (response) => {
+      console.log('responeseeeeeeeeeeee', response);
       if (response.error) {
         console.log(error);
-      } else if (!response.didCancel) {
+      } else if (response.fileSize > 200000) {
+        ToastAndroid.show('Your file so big, please', ToastAndroid.SHORT);
+      } else {
+        console.log(response.fileSize > 200000, 'ASSS');
         this.setState({
           upload: true,
           picture: response,
+          image: {
+            name: response.fileName,
+            type: response.type,
+            size: response.fileSize,
+            uri:
+              Platform.OS === 'android'
+                ? response.uri
+                : response.uri.replace('file://'),
+          },
         });
       }
     });
@@ -123,20 +136,17 @@ class UploadProfile extends Component {
             )}
           </TouchableOpacity>
         </View>
-        <View>
-          <Input
-            containerStyle={{marginVertical: 10}}
-            label="Name"
-            placeholder="Name"
-            value={this.props.route.params.users.name}
-            onChangeText={(text) => this.setState({name: text})}
-            leftIcon={<Icon name="user" size={24} color="black" />}
-          />
-        </View>
 
-        <Button title="upload" onPress={this.uploadPicture} />
+        <Button title="Update" onPress={this.uploadPicture} />
       </View>
     );
   }
 }
 export default connect(null, {loadDataUser})(UploadProfile);
+
+// else if (!response.didCancel) {
+//   this.setState({
+//     upload: true,
+//     picture: response,
+//   });
+// }

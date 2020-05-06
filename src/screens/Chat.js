@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, List} from 'react-native';
 import {SearchBar, ListItem, Avatar, Header} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
@@ -10,6 +10,52 @@ class Chat extends Component {
   state = {
     search: '',
     users: [],
+  };
+  arrayholder = [];
+  componentDidMount() {
+    return fetch('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState(
+          {
+            isLoading: false,
+            dataSource: responseJson,
+          },
+          function () {
+            this.arrayholder = responseJson;
+          },
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+  SearchFilterFunction(text) {
+    //passing the inserted text in textinput
+    const newData = this.arrayholder.filter(function (item) {
+      //applying filter for the inserted text in search bar
+      const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    this.setState({
+      //setting the filtered newData on datasource
+      //After setting the data it will automatically re-render the view
+      dataSource: newData,
+      text: text,
+    });
+  }
+  ListViewItemSeparator = () => {
+    //Item sparator view
+    return (
+      <View
+        style={{
+          height: 0.3,
+          width: '90%',
+          backgroundColor: '#080808',
+        }}
+      />
+    );
   };
 
   updateSearch = (search) => {
@@ -37,6 +83,14 @@ class Chat extends Component {
   //   this.state.dbRef.off;
   // }
   render() {
+    if (this.state.isLoading) {
+      //Loading View while data is loading
+      return (
+        <View style={{flex: 1, paddingTop: 20}}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
     const {search} = this.state;
     console.disableYellowBox = true;
     return (
@@ -62,9 +116,11 @@ class Chat extends Component {
           }}
           placeholderTextColor={{backgroundColor: '#FF941F'}}
           placeholder="Search ..."
-          onChangeText={this.updateSearch}
-          value={search}
+          onChangeText={(text) => this.SearchFilterFunction(text)}
+          autoCorrect={false}
+          value={this.state.text}
         />
+        {/* <List containerStyle={{borderTopWidth: 0, borderBottomWidth: 0}}> */}
         <FlatList
           data={this.state.users}
           renderItem={({item}) => (
@@ -72,6 +128,8 @@ class Chat extends Component {
               onPress={() => this.props.navigation.navigate('Room Chat', item)}>
               <ListItem
                 title={item.name}
+                ItemSeparatorComponent={this.ListViewItemSeparator}
+                // title={item.title}
                 subtitle="online"
                 rightSubtitle="17.30"
                 bottomDivider
@@ -85,10 +143,14 @@ class Chat extends Component {
                     />
                   </View>
                 )}
+                enableEmptySections={true}
+                style={{marginTop: 10}}
+                keyExtractor={(item, index) => index.toString()}
               />
             </TouchableOpacity>
           )}
         />
+        {/* </List> */}
       </View>
     );
   }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Image} from 'react-native';
 import MapView, {AnimatedRegion, Marker} from 'react-native-maps';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
@@ -25,7 +25,7 @@ export default class maps extends Component {
   };
 
   componentDidMount() {
-    Geolocation.getCurrentPosition((info) => console.log(info));
+    Geolocation.watchPosition((info) => console.log(info));
     this.getDataUser();
   }
 
@@ -44,16 +44,20 @@ export default class maps extends Component {
       });
   }
   render() {
-    // const marker = this.state.users.map((item) => (
-    //   <MapView.Marker
-    //     coordinate={{
-    //       latitude: item.latitude,
-    //       longitude: item.longitude,
-    //     }}
-    //     title={item.name}
-    //     description={item.status}
-    //   />
-    // ));
+    const marker = this.state.users.map((item) => (
+      <MapView.Marker
+        coordinate={{
+          latitude: item.latitude,
+          longitude: item.longitude,
+        }}
+        title={item.name}
+        description="My Location">
+        <Image
+          source={{uri: item.picture}}
+          style={{width: 30, height: 38, borderRadius: 40}}
+        />
+      </MapView.Marker>
+    ));
     return (
       <View style={styles.container}>
         <MapView
@@ -67,7 +71,7 @@ export default class maps extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}>
-          {/* {marker} */}
+          {marker}
         </MapView>
       </View>
     );
