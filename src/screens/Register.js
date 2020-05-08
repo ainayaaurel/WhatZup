@@ -16,8 +16,6 @@ Geolocation.setRNConfiguration({skipPermissionRequests: true});
 class RegisterScreen extends Component {
   state = {
     name: '',
-    phone: '',
-    email: '',
     password: '',
     passwordError: null,
     confirmPassword: '',

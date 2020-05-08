@@ -17,6 +17,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import {setLogin} from '../redux/actions/ActionsAuth';
 import {connect} from 'react-redux';
+import Geolocation from '@react-native-community/geolocation';
 
 // style={styles.inputIcon}
 
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 60,
   },
   icon: {
     alignItems: 'center',
@@ -39,13 +40,16 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
+
+    borderRadius: 30,
   },
   inputText: {
     width: WIDTH - 55,
     height: 45,
     fontSize: 16,
     paddingLeft: 45,
-    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderRadius: 30,
+    backgroundColor: 'rgba(0,0,0,0.2)',
     color: 'rgba(255, 255, 255, 0.7)',
   },
   inputIcon: {
@@ -70,6 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     marginTop: 30,
+    borderRadius: 30,
   },
 });
 
@@ -77,6 +82,8 @@ class LoginScreen extends Component {
   state = {
     email: '',
     password: '',
+    showPass: true,
+    press: false,
   };
 
   onSumbitData = () => {
@@ -94,7 +101,24 @@ class LoginScreen extends Component {
   onHandleToHome = () => {
     this.props.navigation.navigate('MainHome');
   };
+  showPass = () => {
+    if (this.state.press === false) {
+      this.setState({
+        showPass: !this.state.showPass,
+        press: !this.state.press,
+      });
+    } else {
+      this.setState({showPass: this.state.showPass, press: this.state.press});
+    }
+  };
 
+  componentDidMount() {
+    Geolocation.getCurrentPosition((location) => {
+      return this.setState({
+        location: location,
+      });
+    });
+  }
   // componentDidMount() {
   //   database().ref('users/').set({email: 'ainaya@gmail.com'});
   // }
@@ -103,7 +127,10 @@ class LoginScreen extends Component {
     return (
       <View style={styles.parents}>
         <View style={styles.logo}>
-          <Icon name="wechat" size={80} style={styles.icon} />
+          <Icon name="wechat" size={100} style={styles.icon} color="#fff" />
+          <Text style={{fontSize: 30, color: '#575c58', fontWeight: 'bold'}}>
+            'WhatZup
+          </Text>
         </View>
         <View style={styles.input}>
           <TextInput
@@ -118,26 +145,27 @@ class LoginScreen extends Component {
           <TextInput
             style={styles.inputText}
             placeholder="Password"
+            secureTextEntry={this.state.showPass}
             placeholderTextColor="rgba(255,255,255, 0.7)"
             underlineColorAndroid="transparent"
             onChangeText={(text) => this.setState({password: text})}
           />
         </View>
-        <View>
+        <View style={{borderRadius: 30}}>
           <TouchableOpacity
             style={styles.btnSignIn}
             onPress={this.onSumbitData}>
             <Text style={{textAlign: 'center'}}>Sign In</Text>
           </TouchableOpacity>
         </View>
-        <View>
+        {/* <View style={{marginTop: 5}}>
           <TouchableOpacity onPress={this.onHandleToForgotPass}>
             <Text>Forgot Password?</Text>
           </TouchableOpacity>
-        </View>
-        <View>
+        </View> */}
+        <View style={{marginTop: 15}}>
           <TouchableOpacity onPress={this.onHandleToSignUp}>
-            <Text> Don't have an account? Sign up free</Text>
+            <Text> Don't have an account? Sign Up free</Text>
           </TouchableOpacity>
         </View>
       </View>

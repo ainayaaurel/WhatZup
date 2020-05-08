@@ -51,15 +51,37 @@ class Chat extends Component {
   onHandleToChat = () => {
     this.props.navigation.navigate('Home');
   };
+  convertDate = (time) => {
+    console.log(time, 'INIT ITM');
+    let results = new Date(time).toLocaleTimeString().substr(0, 5);
+    let date = new Date(time);
+    // let d = new Date(time);
+    // let c = new Date();
+    // let results = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':';
+    // results += (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    // if (c.getDay() !== d.getDay()) {
+    //   results = d.getDay() + '' + d.getMonth() + '' + results;
+    // }
+    let today = new Date();
+    const dateee = `${
+      today.getDate() === date.getDate() ? 'Today' : 'Yesterday'
+    }`;
+    return dateee;
+  };
   convertTime = (time) => {
-    let d = new Date(time);
-    let c = new Date();
-    let results = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':';
-    results += (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-    if (c.getDay() !== d.getDay()) {
-      results = d.getDay() + '' + d.getMonth() + '' + results;
-    }
-    return results;
+    console.log(time, 'INIT ITM');
+    let results = new Date(time).toLocaleTimeString().substr(0, 5);
+    let date = new Date(time);
+    // let d = new Date(time);
+    // let c = new Date();
+    // let results = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':';
+    // results += (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    // if (c.getDay() !== d.getDay()) {
+    //   results = d.getDay() + '' + d.getMonth() + '' + results;
+    // }
+    let today = new Date();
+    const dateee = `${results} WIB`;
+    return dateee;
   };
   sendMessage = async () => {
     if (this.state.textMessage.length > 0) {
@@ -157,12 +179,15 @@ class Chat extends Component {
             const item = message.item;
             let inMessage = item.from !== this.state.currentUser.uid;
             let itemStyle = inMessage ? styles.itemIn : styles.itemOut;
+            let dateStyle = inMessage ? styles.dateIn : styles.dateOut;
+            let timeStyle = inMessage ? styles.timeIn : styles.timeOut;
             return (
               <View style={[styles.item, itemStyle]}>
-                {!inMessage && this.renderDate(item.date)}
+                {this.renderDate(item.date)}
                 <View style={[styles.balloon]}>
-                  <Text>{item.message}</Text>
-                  <Text>{this.convertTime(item.time)}</Text>
+                  <Text style={{alignSelf: 'flex-end'}}>{item.message}</Text>
+                  <Text style={timeStyle}>{this.convertTime(item.time)}</Text>
+                  <Text style={dateStyle}>{this.convertDate(item.time)}</Text>
                 </View>
                 {inMessage && this.renderDate(item.date)}
               </View>
@@ -194,6 +219,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  timeOut: {
+    alignSelf: 'flex-end',
+    fontSize: 11,
+    marginTop: 4,
+    color: '#c9c9c9',
+  },
+  timeIn: {
+    alignSelf: 'flex-start',
+    fontSize: 11,
+    marginTop: 4,
+    color: '#c9c9c9',
+  },
+  dateIn: {
+    fontSize: 9,
+    alignSelf: 'flex-start',
+    marginTop: 0,
+    color: '#c9c9c9',
+  },
+  dateOut: {
+    fontSize: 9,
+    alignSelf: 'flex-end',
+    marginTop: 0,
+    color: '#c9c9c9',
+  },
   list: {
     paddingHorizontal: 17,
   },
@@ -220,7 +269,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderBottomColor: '#F5FCFF',
     backgroundColor: '#FFFFFF',
-    borderRadius: 30,
+    borderRadius: 10,
     borderBottomWidth: 1,
     height: 40,
     flexDirection: 'row',
@@ -237,7 +286,7 @@ const styles = StyleSheet.create({
   },
   balloon: {
     maxWidth: 280,
-    padding: 10,
+    padding: 7,
     borderRadius: 15,
   },
   itemIn: {
@@ -248,17 +297,17 @@ const styles = StyleSheet.create({
   },
   time: {
     alignSelf: 'flex-end',
-    margin: 15,
-    fontSize: 12,
-    color: '#808080',
+    margin: 0,
+    fontSize: 2,
+    color: '#000',
   },
   item: {
-    marginVertical: 14,
+    marginVertical: 8,
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#eeeeee',
-    borderRadius: 300,
-    padding: 5,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    padding: 3,
   },
 });
 

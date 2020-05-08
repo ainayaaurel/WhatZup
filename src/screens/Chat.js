@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, TouchableOpacity, List} from 'react-native';
+import {View, FlatList, ScrollView, TouchableOpacity, List} from 'react-native';
 import {SearchBar, ListItem, Avatar, Header} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
@@ -12,38 +12,20 @@ class Chat extends Component {
     users: [],
   };
   arrayholder = [];
-  componentDidMount() {
-    return fetch('https://jsonplaceholder.typicode.com/posts')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState(
-          {
-            isLoading: false,
-            dataSource: responseJson,
-          },
-          function () {
-            this.arrayholder = responseJson;
-          },
-        );
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+
   SearchFilterFunction(text) {
-    //passing the inserted text in textinput
-    const newData = this.arrayholder.filter(function (item) {
-      //applying filter for the inserted text in search bar
-      const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    this.setState({
-      //setting the filtered newData on datasource
-      //After setting the data it will automatically re-render the view
-      dataSource: newData,
-      text: text,
-    });
+    if (text) {
+      const dataFilter = this.state.users.filter((data, index) =>
+        data.name.includes(text),
+      );
+      this.setState((prevState) => {
+        return {
+          users: dataFilter,
+        };
+      });
+    } else {
+      this.getDataUser();
+    }
   }
   ListViewItemSeparator = () => {
     //Item sparator view
@@ -94,64 +76,83 @@ class Chat extends Component {
     const {search} = this.state;
     console.disableYellowBox = true;
     return (
-      <View>
-        <Header
-          containerStyle={{marginTop: -30, backgroundColor: '#FF941F'}}
-          centerComponent={{text: 'TALKTO', style: {color: '#fff'}}}
-        />
-        <SearchBar
-          containerStyle={{
-            borderRadius: 20,
-            backgroundColor: '#fff',
-            borderTopColor: 0,
-            borderBottomColor: 0,
-          }}
-          inputContainerStyle={{
-            backgroundColor: '#fff',
-            borderRadius: 20,
-          }}
-          inputStyle={{
-            marginVertical: 0,
-            paddingVertical: 0,
-          }}
-          placeholderTextColor={{backgroundColor: '#FF941F'}}
-          placeholder="Search ..."
-          onChangeText={(text) => this.SearchFilterFunction(text)}
-          autoCorrect={false}
-          value={this.state.text}
-        />
-        {/* <List containerStyle={{borderTopWidth: 0, borderBottomWidth: 0}}> */}
-        <FlatList
-          data={this.state.users}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Room Chat', item)}>
-              <ListItem
-                title={item.name}
-                ItemSeparatorComponent={this.ListViewItemSeparator}
-                // title={item.title}
-                subtitle="online"
-                rightSubtitle="17.30"
-                bottomDivider
-                leftElement={() => (
-                  <View>
-                    <Avatar
-                      rounded
-                      source={{
-                        uri: item.picture,
-                      }}
-                    />
-                  </View>
-                )}
-                enableEmptySections={true}
-                style={{marginTop: 10}}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </TouchableOpacity>
-          )}
-        />
+      <>
+        <View>
+          <Header
+            containerStyle={{marginTop: -30, backgroundColor: '#FF941F'}}
+            centerComponent={{
+              text: 'WhatZup',
+              style: {color: '#fff', fontSize: 23, fontWeight: 'bold'},
+            }}
+          />
+        </View>
+        <View>
+          <SearchBar
+            containerStyle={{
+              borderRadius: 20,
+              backgroundColor: '#fff',
+              borderTopColor: 0,
+              borderBottomColor: 0,
+            }}
+            inputContainerStyle={{
+              backgroundColor: '#fff',
+              borderRadius: 20,
+            }}
+            inputStyle={{
+              marginVertical: 0,
+              paddingVertical: 0,
+            }}
+            placeholderTextColor={{backgroundColor: '#FF941F'}}
+            placeholder="Search ..."
+            value={this.state.search}
+            onChangeText={(text) => {
+              this.setState({
+                search: text,
+              });
+              this.SearchFilterFunction(text);
+            }}
+            autoCorrect={false}
+          />
+          {/* <List containerStyle={{borderTopWidth: 0, borderBottomWidth: 0}}> */}
+        </View>
+        <ScrollView>
+          <View>
+            <FlatList
+              data={this.state.users}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('Room Chat', item)
+                  }>
+                  <ListItem
+                    title={item.name}
+                    ItemSeparatorComponent={this.ListViewItemSeparator}
+                    // title={item.title}
+                    subtitle={item.status}
+                    // rightSubtitle="17.30"
+                    bottomDivider
+                    leftElement={() => (
+                      <View>
+                        <Avatar
+                          rounded
+                          source={{
+                            uri: item.picture,
+                          }}
+                        />
+                      </View>
+                    )}
+                    enableEmptySections={true}
+                    style={{marginTop: 0}}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </ScrollView>
+
         {/* </List> */}
-      </View>
+      </>
     );
   }
 }

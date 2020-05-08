@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Avatar, Input, Button} from 'react-native-elements';
+import {Avatar, Button} from 'react-native-elements';
 import {View, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
